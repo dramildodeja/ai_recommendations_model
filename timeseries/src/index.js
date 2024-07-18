@@ -110,7 +110,7 @@ const renderOutcomes = (data) => {
     values: [customer.length, noCustomer.length],
     type: "pie",
     opacity: 0.6,
-    marker: { colors: ["red", "green"],
+    marker: { colors: ["green", "red"],
     },
   }];
   Plotly.newPlot("predicton_output_section", chartData, { title: "Customer vs NoCustomer"});

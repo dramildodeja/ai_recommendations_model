@@ -19,7 +19,7 @@ export const runPrediction = async (model) => {
     const outcomeElement = document.getElementById("outcome");
     outcomeElement.style.display = "block";
     outcomeElement.innerText = outcome === 0 ? "Prospective Customer" : "High-Potential Customer";
-    outcomeElement.style.color = outcome === 0 ? "green" : "red";
+    outcomeElement.style.color = outcome === 0 ? "red" : "green";
   };
   predictionInputForm.addEventListener("click", submitForPrediction);
 };
