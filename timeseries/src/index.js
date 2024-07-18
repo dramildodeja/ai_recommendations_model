@@ -1,4 +1,5 @@
 import "./styles.css";
+import Plotly from "plotly.js-dist";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
 import * as Papa from "papaparse";
@@ -15,7 +16,7 @@ Papa.parsePromise = function (file) {
   return new Promise(function (complete, error) {Papa.parse(file, {header: true,download: true,dynamicTyping: true,complete,error});});
 };
 const prepareData = async () => {
-  const csv = await Papa.parsePromise("https://github.com/dramildodeja/ai_recommendations_model/blob/main/timeseries/src/data/training_data_1.csv");
+  const csv = await Papa.parsePromise("https://raw.githubusercontent.com/dramildodeja/ai_recommendations_model/main/timeseries/src/data/training_data_1.csv");
   return csv.data;
 };
 
@@ -80,7 +81,7 @@ const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
   const trainLogs = [];
   const lossContainer = document.getElementById("loss-cont");
   const accContainer = document.getElementById("acc-cont");
-  console.log("Training...");
+  //console.log("Training...");
   // We train the model for 100 epochs meaning we go through the dataset 100 times
   // We also pass the validation data so we can see how the model performs on unseen data
   // We use callbacks to log the loss and accuracy
@@ -96,8 +97,7 @@ const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
       },
     },
   });
-
-  console.log("Model training completed");
+  //console.log("Model training completed");
   return model;
 };
 
@@ -113,7 +113,7 @@ const renderOutcomes = (data) => {
     marker: { colors: ["red", "green"],
     },
   }];
-  Plotly.newPlot("prediction-chart", chartData, { title: "Customer vs NoCustomer"});
+  Plotly.newPlot("predicton_output_section", chartData, { title: "Customer vs NoCustomer"});
 };
 
 //Init function

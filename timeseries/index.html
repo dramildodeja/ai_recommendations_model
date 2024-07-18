@@ -1,39 +1,44 @@
 <!doctype html>
 <html>
   <head>
-    <title>Timeseries Data Prediction</title>
     <meta charset="UTF-8" />
+    <title>Timeseries Data Prediction</title>
   </head>
   <body>
-    <h1>Predicting Business Development Lead Scores</h1>
+    <h1>Business Development Lead Conversion Probability</h1>
     <div id="outcome-cont" />
     <div id="loss-cont"></div>
     <div id="acc-cont"></div>
-    <div id="confusion-matrix"></div>
     <section id="predicton_output_section">
-      <h2>Predict if we would get a customer buy-in</h2>
       <form id="prediction_input_form">
-        <label>
-          Client Presentation Completion %
-          <input
-            id="client_presentation_completed"
-            name="client_presentation_completed"
-            type="number"
-            min="1"
-            max="100"
-          />
-        </label>
-        <label>
-          Client Follow Count %
-          <input
-            id="revisiting_lead_status"
-            name="revisiting_lead_status"
-            type="number"
-            min="1"
-            max="100"
-          />
-        </label>
-        <button type="submit">Model Prediction</button>
+        <table cellpadding=2 cellspacing=0>
+          <tr>
+            <td>
+              <span style="float: left;">
+                <h6>% Of Presentation Completed&nbsp;</h6>
+              </span>
+              <span style="float: right;margin-top: 35px;">
+                <input style="width: 50px;" id="client_presentation_completed" name="client_presentation_completed" type="number" min="1" max="100"/>
+              </span>
+              </td>
+          </tr>
+          <tr>
+            <td>
+              <span style="float: left;">
+                <h6>% Of Follow-Up Completed&nbsp;</h6>
+              </span>
+              <span style="float: right;margin-top: 35px;">
+                <input style="width: 50px;" id="revisiting_lead_status" name="revisiting_lead_status" type="number" min="1" max="100"/>
+              </span>
+              </td>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button type="button"><b><h2>Perform Realtime Prediction</h2></b></button>
+            </td>
+          </tr>
+        </table>
         <div id="outcome">
           <p id="prediction"></p>
         </div>

@@ -6,12 +6,7 @@ body {
 h1 {
   text-align: center;
 }
-#tutorial {
-  font-size: 2rem;
-  margin: 2rem auto;
-  text-align: center;
-}
-#form_section {
+#predicton_output_section {
   display: none;
   text-align: center;
   margin: 2rem auto;
@@ -20,13 +15,18 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-#form_section form {
+#prediction_input_form {
+  font-size: 2rem;
+  margin: 2rem auto;
+  text-align: center;
+}
+#prediction_input_form form {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem;
 }
-#form_section form * {
+#prediction_input_form form * {
   margin: 0.5rem;
 }
 #outcome {
@@ -36,7 +36,6 @@ h1 {
   font-weight: bold;
   margin: 2rem auto;
   color: rebeccaPurple;
-  animation: fadein 6s infinite;
 }
 @keyframes fadein {
   0% {

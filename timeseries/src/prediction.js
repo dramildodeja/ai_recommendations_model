@@ -3,9 +3,10 @@ import * as tf from "@tensorflow/tfjs";
 export const runPrediction = async (model) => {
   const predictionInputForm = document.getElementById("prediction_input_form");
   const clientPresentationCompletedInput = document.getElementById("client_presentation_completed");
-  const revisitingLeadStatusInput = document.getElementById("revisiting_lead_status_input");
+  const revisitingLeadStatusInput = document.getElementById("revisiting_lead_status");
 
   const submitForPrediction = (e) => {
+    console.log(clientPresentationCompletedInput.value);
     //get data from form and create tensor from that data
     const tensorData = tf.tensor([Object.values({
       client_presentation_completed: clientPresentationCompletedInput.value / 100,
@@ -17,9 +18,8 @@ export const runPrediction = async (model) => {
     const outcome = prediction.argMax(-1).dataSync()[0];
     const outcomeElement = document.getElementById("outcome");
     outcomeElement.style.display = "block";
-    outcomeElement.innerText = outcome === 0 ? "They would not become our Customer" : "They would become our Customer";
-    outcomeElement.style.color = outcome === 0 ? "red" : "green";
+    outcomeElement.innerText = outcome === 0 ? "Prospective Customer" : "High-Potential Customer";
+    outcomeElement.style.color = outcome === 0 ? "green" : "red";
   };
-
-  predictionInputForm.addEventListener("submit", submitForPrediction);
+  predictionInputForm.addEventListener("click", submitForPrediction);
 };
