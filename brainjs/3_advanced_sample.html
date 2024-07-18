@@ -87,17 +87,61 @@
             "category": "hardware"
         }
       ];
+
       const neural_network = new brain.recurrent.LSTM();
       const training_data = data.map(item => ({
         input: item.text,
         output: item.category
       }));
+
       neural_network.train(training_data, {
-        iterations: 500
+        iterations: 200, // the maximum times to iterate the training data --> number greater than 0
+        //errorThresh: 0.005, // the acceptable error percentage from training data --> number between 0 and 1
+        //log: false, // true to use console.log, when a function is supplied it is used --> Either true or a function
+        //logPeriod: 10, // iterations between logging out --> number greater than 0
+        //learningRate: 0.3, // scales with delta to effect training rate --> number between 0 and 1
+        //momentum: 0.1, // scales with next layer's change value --> number between 0 and 1
+        //callback: null, // a periodic call back that can be triggered while training --> null or function
+        //callbackPeriod: 10, // the number of iterations through the training data between callback calls --> number greater than 0
+        //timeout: number, // the max number of milliseconds to train for --> number greater than 0. Default --> Infinity
       });
-      const output = neural_network.run('i want to install ram');
+
+      /*neural_network.trainAsync(training_data, {
+        iterations: 200, // the maximum times to iterate the training data --> number greater than 0
+        //errorThresh: 0.005, // the acceptable error percentage from training data --> number between 0 and 1
+        //log: false, // true to use console.log, when a function is supplied it is used --> Either true or a function
+        //logPeriod: 10, // iterations between logging out --> number greater than 0
+        //learningRate: 0.3, // scales with delta to effect training rate --> number between 0 and 1
+        //momentum: 0.1, // scales with next layer's change value --> number between 0 and 1
+        //callback: null, // a periodic call back that can be triggered while training --> null or function
+        //callbackPeriod: 10, // the number of iterations through the training data between callback calls --> number greater than 0
+        //timeout: number, // the max number of milliseconds to train for --> number greater than 0. Default --> Infinity
+      })
+      .then((res) => {
+        // do something with my trained network
+      }).catch(handleError);*/
+
+      //Training multiple models at the same time
+      /*const net = new brain.NeuralNetwork();
+      const net2 = new brain.NeuralNetwork();
+      const p1 = net.trainAsync(data, options);
+      const p2 = net2.trainAsync(data, options);
+      Promise.all([p1, p2])
+        .then((values) => {
+          const res = values[0];
+          const res2 = values[1];
+          console.log(
+            `net trained in ${res.iterations} and net2 trained in ${res2.iterations}`
+          );
+          // do something super cool with my 2 trained networks
+        })
+        .catch(handleError);*/
+
+      //const output = neural_network.run('drive does not have space anymore');
+      //const output = neural_network.run('code is failing');
+      const output = neural_network.run('out of memory error');
       document.getElementById("results").innerHTML = output;
-      console.log(`Results ${output}`);
+      console.log(`Results ${output}`);      
     </script>
   </body>
 </html>
