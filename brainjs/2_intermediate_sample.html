@@ -1,0 +1,24 @@
+<html>
+  <script src="brain.js"></script>
+  <body>
+    <center><h1>Gen AI Session 3</h1></center>
+    <center><h3>Results</h3></center>
+    <center><h4><div id="results"></div></h4></center>
+    <script>
+      const neural_network = new brain.NeuralNetwork();
+      const training_data = [
+        {input: [1,2], output: [1]}, //Team 2 will win
+        {input: [1,3], output: [1]}, //Team 3 will win
+        {input: [2,3], output: [0]}, //Team 2 will win
+        {input: [2,4], output: [1]}, //Team 4 will win
+        {input: [1,2], output: [0]}, //Team 1 will win
+        //{input: [1,3], output: [0]}, //Team 1 will win
+        //{input: [4,3], output: [1]}, //Team 3 will win
+      ];
+      neural_network.train(training_data);
+      const output = neural_network.run([2,3]);
+      document.getElementById("results").innerHTML = output;
+      console.log(`Results ${output}`);
+    </script>
+  </body>
+</html>

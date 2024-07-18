@@ -1,0 +1,23 @@
+<html>
+  <script src="brain.js"></script>
+  <body>
+    <center><h1>Gen AI Session 3</h1></center>
+    <center><h3>Results</h3></center>
+    <center><h4><div id="results"></div></h4></center>
+    <script>
+      const neural_network = new brain.NeuralNetwork();
+      const training_data = [
+        {input: [0,0,0], output: [0]},
+        {input: [0,0,1], output: [0]},
+        {input: [0,1,1], output: [0]},
+        {input: [1,0,0], output: [1]},
+        {input: [1,0,1], output: [1]},
+        {input: [1,1,1], output: [1]}
+      ];
+      neural_network.train(training_data);
+      const output = neural_network.run([1,0,0]);
+      document.getElementById("results").innerHTML = output;
+      console.log(`Results ${output}`);
+    </script>
+  </body>
+</html>

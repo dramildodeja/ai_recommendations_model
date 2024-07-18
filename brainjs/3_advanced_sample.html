@@ -1,0 +1,103 @@
+<html>
+  <script src="brain.js"></script>
+  <body>
+    <center><h1>Gen AI Session 3</h1></center>
+    <center><h3>Results</h3></center>
+    <center><h4><div id="results"></div></h4></center>
+    <script>
+      const data = [
+        {
+          "text": "my unit test failed",
+          "category": "software"
+        },
+        {
+          "text": "tried the program, but it was buggy",
+          "category": "software"
+        },
+        {
+          "text": "i need a new power supply",
+          "category": "hardware"
+        },
+        {
+          "text": "the drive has a 2TB capacity",
+          "category": "hardware"
+        },
+        {
+          "text": "unit-tests",
+          "category": "software"
+        },
+        {
+          "text": "program",
+          "category": "software"
+        },
+        {
+          "text": "power supply",
+          "category": "hardware"
+        },
+        {
+          "text": "drive",
+          "category": "hardware"
+        },
+        {
+          "text": "it needs more memory",
+          "category": "hardware"
+        },
+        {
+          "text": "code",
+          "category": "software"
+        },
+        {
+          "text": "i found some bugs in the code",
+          "category": "software"
+        },
+        {
+          "text": "i swapped the memory",
+          "category": "hardware"
+        },
+        {
+          "text": "i tested the code",
+          "category": "software"
+        },
+        {
+          "text": "i love computers",
+          "category": "hardware"
+        },
+        {
+          "text": "programming",
+          "category": "software"
+        },
+        {
+          "text": "i broke my pc",
+          "category": "hardware"
+        },
+        {
+          "text": "computer",
+          "category": "hardware"
+        },
+        {
+            "text": "buy me a laptop",
+            "category": "hardware"
+        },
+        {
+            "text": "i love to play games",
+            "category": "software"
+        },
+        {
+            "text": "RAM",
+            "category": "hardware"
+        }
+      ];
+      const neural_network = new brain.recurrent.LSTM();
+      const training_data = data.map(item => ({
+        input: item.text,
+        output: item.category
+      }));
+      neural_network.train(training_data, {
+        iterations: 500
+      });
+      const output = neural_network.run('i want to install ram');
+      document.getElementById("results").innerHTML = output;
+      console.log(`Results ${output}`);
+    </script>
+  </body>
+</html>
