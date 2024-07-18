@@ -1,12 +1,12 @@
 import * as tf from "@tensorflow/tfjs";
 
 export const runPrediction = async (model) => {
-  const predictionInputForm = document.getElementById("prediction_input_form");
+  const predictionInputForm = document.getElementById("prediction_input");
   const clientPresentationCompletedInput = document.getElementById("client_presentation_completed");
   const revisitingLeadStatusInput = document.getElementById("revisiting_lead_status");
+  const downloadTrainedModelInput = document.getElementById("download_trained_model");
 
   const submitForPrediction = (e) => {
-    console.log(clientPresentationCompletedInput.value);
     //get data from form and create tensor from that data
     const tensorData = tf.tensor([Object.values({
       client_presentation_completed: clientPresentationCompletedInput.value / 100,
@@ -21,5 +21,9 @@ export const runPrediction = async (model) => {
     outcomeElement.innerText = outcome === 0 ? "Prospective Customer" : "High-Potential Customer";
     outcomeElement.style.color = outcome === 0 ? "red" : "green";
   };
+  const downloadTrainedModel = async () => {
+    await model.save('downloads://my-ltsm-model');
+  };
   predictionInputForm.addEventListener("click", submitForPrediction);
+  downloadTrainedModelInput.addEventListener("click", downloadTrainedModel);
 };

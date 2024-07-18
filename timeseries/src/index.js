@@ -69,7 +69,10 @@ const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
   // Compile the model
   // we use adam optimizer that is a popular optimizer
   // loss: binaryCrossentropy, because we have 2 outcomes
+  // so that we can measures the dissimilarity between the actual labels and the predicted
   // we want to minimize the loss
+  // 0.001 is the default learning
+  // Varying learning rate between 0.0001 and 0.01 is considered optimal in most of the cases
   const optimizer = tf.train.adam(0.001);
   model.compile({
     optimizer: optimizer,
@@ -78,14 +81,23 @@ const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
   });
 
   // Train the model
+  //console.log("Model training started");
   const trainLogs = [];
   const lossContainer = document.getElementById("loss-cont");
   const accContainer = document.getElementById("acc-cont");
-  //console.log("Training...");
-  // We train the model for 100 epochs meaning we go through the dataset 100 times
-  // We also pass the validation data so we can see how the model performs on unseen data
-  // We use callbacks to log the loss and accuracy
-  // We also use tfvis to visualize the training process
+  // We will rain the model for 100 epochs meaning we go through the dataset 100 times
+  // We will also pass the validation data so we can see how the model performs on unseen data
+  // We will use callbacks to log the loss and accuracy.
+  // If both loss and accuracy are low, it means the model makes small errors in most of the data
+  //  The loss decreases as the training process goes on,
+  //  except for some fluctuation introduced by the mini-batch gradient descent and/or regularization techniques like dropout (that introduces random noise).
+  // We will also use tfvis to visualize the training process
+  // an epoch is a complete pass of a training dataset through an algorithm
+  // an epoch is made up of batches of data and iterations
+  // loss = training loss
+  // val_loss = validation loss
+  // acc = accuracy
+  // val_acc = validation accuracy
   await model.fitDataset(trainDs, {
     epochs: 100,
     validationData: validDs,
