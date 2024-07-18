@@ -1,62 +1,45 @@
 import "./styles.css";
-
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
 import * as Papa from "papaparse";
 import _ from "lodash";
-import { renderOutcomes, renderGraphs } from "./createGraphs.js";
-import { runForm } from "./form.js";
+import { runPrediction } from "./prediction.js";
+const predictionOutputSection = document.getElementById("predicton_output_section");
 
-const formSection = document.getElementById("form_section");
-
-Papa.parsePromise = function (file) {
-  return new Promise(function (complete, error) {
-    Papa.parse(file, {
-      header: true,
-      download: true,
-      dynamicTyping: true,
-      complete,
-      error,
-    });
-  });
-};
-
+//converting set of sparse labels to a dense one-hot representation
+//2 because we have 2 outputs in the prediction results...Customer or No-Customer
 const oneHot = (outcome) => Array.from(tf.oneHot(outcome, 2).dataSync());
 
+//this is a lib for efficiently parsing csv data for preparing datasets
+Papa.parsePromise = function (file) {
+  return new Promise(function (complete, error) {Papa.parse(file, {header: true,download: true,dynamicTyping: true,complete,error});});
+};
 const prepareData = async () => {
-  const csv = await Papa.parsePromise(
-    "https://raw.githubusercontent.com/misterbracket/logistic-regression-tensorflow-js/main/src/data/fake_data_2.csv",
-  );
+  const csv = await Papa.parsePromise("https://github.com/dramildodeja/ai_recommendations_model/blob/main/timeseries/src/data/training_data_1.csv");
   return csv.data;
 };
 
-//TODO: For now this only works with continuous features
+//creating datasets prior to train the model from the raw data
 const createDataSets = (data, features, testSize, batchSize) => {
-  //These are the features that will be used to train the model
   const X = data.map((r) =>
     features.map((f) => {
       const val = r[f];
       return val === undefined ? 0 : val;
     }),
   );
-
-  // The outcome of the model
-  // We use one hot encoding to represent the outcome
+  // The outcome of the model with one-hot encoding to represent the outcome
+  //regression on client_converted field...Customer or No-Customer aka 0 or 1
   const y = data.map((r) => {
-    const outcome = r.has_converted === undefined ? 0 : r.has_converted;
+    const outcome = r.client_converted === undefined ? 0 : r.client_converted;
     return oneHot(outcome);
   });
 
   //Split the data into training and testing sets
+  //Why this is important - https://builtin.com/data-science/train-test-split
   const splitIdx = parseInt((1 - testSize) * data.length, 10);
-
   // Create a dataset from the data
-  // We zip the features and the outcome together
-  // Shuffle the data and split it into batches
-  const ds = tf.data
-    .zip({ xs: tf.data.array(X), ys: tf.data.array(y) })
-    .shuffle(data.length, 42);
-
+  // zip the features and outcome together then shuffle the data and split it into batches (size 42)
+  const ds = tf.data.zip({ xs: tf.data.array(X), ys: tf.data.array(y)}).shuffle(data.length, 42);
   return [
     ds.take(splitIdx).batch(batchSize),
     ds.skip(splitIdx + 1).batch(batchSize),
@@ -65,8 +48,9 @@ const createDataSets = (data, features, testSize, batchSize) => {
   ];
 };
 
-const trainLogisticRegression = async (featureCount, trainDs, validDs) => {
+const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
   const model = tf.sequential();
+
   // Add a dense layer
   // Dense layers are fully connected layers
   // units: 2, because we have 2 outcomes
@@ -117,23 +101,34 @@ const trainLogisticRegression = async (featureCount, trainDs, validDs) => {
   return model;
 };
 
+const renderOutcomes = (data) => {
+  const outcomes = data.map((r) => r.client_converted);
+  const [customer, noCustomer] = _.partition(outcomes, (o) => o === 1);
+  const chartData = [
+  {
+    labels: ["Customer", "NoCustomer"],
+    values: [customer.length, noCustomer.length],
+    type: "pie",
+    opacity: 0.6,
+    marker: { colors: ["red", "green"],
+    },
+  }];
+  Plotly.newPlot("prediction-chart", chartData, { title: "Customer vs NoCustomer"});
+};
+
+//Init function
 const run = async () => {
   const data = await prepareData();
-
   renderOutcomes(data);
-
-  renderGraphs(data);
-
-  const features = ["interactive_demo_completion", "revisiting_lead_status"];
-
+  const features = ["client_presentation_completed", "revisiting_lead_status"];
   const [trainDs, validDs, xTest, yTest] = createDataSets(
     data,
     features,
     0.1,
     16,
   );
-  const model = await trainLogisticRegression(
-    features.length,
+  const model = await trainMyLTSMModel(
+    features.length,//data columns
     trainDs,
     validDs,
   );
@@ -142,14 +137,14 @@ const run = async () => {
 
 if (document.readyState !== "loading") {
   run().then((model) => {
-    formSection.style.display = "flex";
-    runForm(model);
+    predictionOutputSection.style.display = "flex";
+    runPrediction(model);
   });
 } else {
   document.addEventListener("DOMContentLoaded", () => {
     run().then((model) => {
-      formSection.style.display = "flex";
-      runForm(model);
+      predictionOutputSection.style.display = "flex";
+      runPrediction(model);
     });
   });
 }
