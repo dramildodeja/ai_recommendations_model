@@ -85,6 +85,7 @@ const trainMyLTSMModel = async (featureCount, trainDs, validDs) => {
   const trainLogs = [];
   const lossContainer = document.getElementById("loss-cont");
   const accContainer = document.getElementById("acc-cont");
+  // .fitDataset() method is used to trains the layer model by using a dataset object
   // We will rain the model for 100 epochs meaning we go through the dataset 100 times
   // We will also pass the validation data so we can see how the model performs on unseen data
   // We will use callbacks to log the loss and accuracy.
