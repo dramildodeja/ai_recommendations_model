@@ -12,6 +12,11 @@ export const runPrediction = async (model) => {
       client_presentation_completed: clientPresentationCompletedInput.value / 100,
       revisiting_lead_status: revisitingLeadStatusInput.value / 100,
     })]);
+
+    //use a pretained model
+    //import * as tfn from "@tensorflow/tfjs-node";
+    //model = await tf.loadLayersModel(tfn.io.fileSystem("./models/my-ltsm-model.json"));
+    
     //send data to the model for prediction
     const prediction = model.predict(tensorData);
     //return the outcome
